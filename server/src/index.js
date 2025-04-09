@@ -6,36 +6,25 @@ const morgan = require("morgan");
 const { Server } = require("socket.io");
 const socket = require("./socket/socket");
 const dotenv = require("dotenv");
-const Chat = require("./models/Chat"); 
-
-// middlewares
-const { rateLimiter } = require("./middlewares/rateLimiter"); 
-
-// mongoose config
-require("./config/mongoose");
-
-// env config
+const mongoose = require("mongoose"); // <== ADD THIS
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Allows cross-origin requests
+// Middlewares
 app.use(cors({
     origin: process.env.CLIENT_PUBLIC_URL,
     methods: ["GET", "POST"],
     credentials: true,
 }));
 
-// Parse JSON bodies (as sent by API clients)
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// trust proxy (needed if hosted behind proxies like Render)
 app.set("trust proxy", true);
 app.set("view engine", "hbs");
 
-// HTTP request logging
 if (process.env.NODE_ENV !== "production") {
     app.use(
         morgan("combined", {
@@ -45,14 +34,14 @@ if (process.env.NODE_ENV !== "production") {
 }
 app.use(morgan("dev"));
 
-// apply rate limiter middleware
+const { rateLimiter } = require("./middlewares/rateLimiter");
 app.use(rateLimiter);
 
-// serve static files
+// Static files
 const publicDirPath = path.join(__dirname, "../public");
 app.use(express.static(publicDirPath));
 
-// import routes
+// Routes
 const adminRoutes = require("./routes/admin");
 const mentorRoutes = require("./routes/mentor");
 const studentRoutes = require("./routes/student");
@@ -63,7 +52,6 @@ const messageRoutes = require("./routes/message");
 const notificationRoutes = require("./routes/notification");
 const meetingRoutes = require("./routes/meeting");
 
-// use routes
 app.use("/", indexRoutes);
 app.use("/admin", adminRoutes);
 app.use("/mentor", mentorRoutes);
@@ -79,25 +67,38 @@ app.all("*", (req, res) => {
     res.status(404).json({ message: "Route not found" });
 });
 
-// start server
-const server = app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// 🛠 CONNECT TO MONGODB AND THEN START SERVER
+mongoose.connect(process.env.MONGO_DB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+})
+.then(() => {
+    console.log("Connected to Database ✅");
 
-// setup socket.io
-const io = new Server(server, {
-    pingTimeout: 60000,
-    cors: {
-        origin: process.env.CLIENT_PUBLIC_URL,
-        methods: ["GET", "POST"],
-        credentials: true,
-    },
+    const server = app.listen(PORT, () => {
+        console.log(`Server running on port ${PORT}`);
+    });
+
+    const io = new Server(server, {
+        pingTimeout: 60000,
+        cors: {
+            origin: process.env.CLIENT_PUBLIC_URL,
+            methods: ["GET", "POST"],
+            credentials: true,
+        },
+    });
+
+    // global socket maps
+    global.msgSocketMap = {};
+    global.notifySocketMap = {};
+
+    // start socket handling
+    socket.start(io);
+
+    // load cron jobs
+    require("./crons/interaction.cron");
+})
+.catch((error) => {
+    console.error("Database connection failed ❌", error);
+    process.exit(1); // Stop server
 });
-
-// global socket maps
-global.msgSocketMap = {};
-global.notifySocketMap = {};
-
-// start socket handling
-socket.start(io);
-
-// load cron jobs
-require("./crons/interaction.cron");
