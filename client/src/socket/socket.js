@@ -2,7 +2,7 @@
 import io from "socket.io-client";
 import React, { createContext, useContext, useState } from "react";
 
-const ENDPOINT = "http://localhost:5000";
+const ENDPOINT = "https://mentor-connect-5.onrender.com"; // UPDATED
 
 // Create the context
 const SocketContext = createContext();

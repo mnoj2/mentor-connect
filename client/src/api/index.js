@@ -2,7 +2,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:5000",
+  baseURL: "https://mentor-connect-5.onrender.com", // UPDATED
 });
 
 // Attach token to every request if available
