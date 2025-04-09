@@ -6,7 +6,8 @@ const morgan = require("morgan");
 const { Server } = require("socket.io");
 const socket = require("./socket/socket");
 const dotenv = require("dotenv");
-const mongoose = require("mongoose"); // <== ADD THIS
+const mongoose = require("mongoose");
+
 dotenv.config();
 
 const app = express();
@@ -62,9 +63,15 @@ app.use("/messages", messageRoutes);
 app.use("/notifications", notificationRoutes);
 app.use("/meetings", meetingRoutes);
 
-// 404 fallback
-app.all("*", (req, res) => {
+// 404 fallback (updated)
+app.use((req, res) => {
     res.status(404).json({ message: "Route not found" });
+});
+
+// Global error handler (optional but recommended)
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).json({ message: "Something broke!" });
 });
 
 // 🛠 CONNECT TO MONGODB AND THEN START SERVER
