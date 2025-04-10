@@ -1,26 +1,36 @@
 const multer = require("multer");
+const fs = require("fs");
+const path = require("path");
 
-//Configuration for Multer
+// Ensure tmp/ folder exists
+const tmpDir = path.join(__dirname, "../tmp"); // Adjust the path as needed
+if (!fs.existsSync(tmpDir)) {
+  fs.mkdirSync(tmpDir, { recursive: true });
+}
+
+// Multer Storage Configuration
 const multerStorage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, "./tmp");
-    },
-    filename: function (req, file, cb) {
-        cb(null, Date.now() + "-" + file.originalname);
-    },
+  destination: (req, file, cb) => {
+    cb(null, tmpDir);
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + "-" + file.originalname);
+  },
 });
 
-// Multer Filter
+// Multer Filter Configuration
 const multerFilter = (req, file, cb) => {
-    if (!file.originalname.toLowerCase().match(/\.(jpeg|jpg|png)$/)) {
-        return cb(new Error("Please upload a JPEG/JPG or PNG file."));
-    }
-
-    cb(undefined, true);
+  if (file.mimetype.startsWith("image/")) {
+    cb(null, true);
+  } else {
+    cb(new Error("Please upload only images (JPEG, JPG, PNG)."), false);
+  }
 };
 
-// exporting
-module.exports = multer({
-    storage: multerStorage,
-    fileFilter: multerFilter,
+// Exporting the configured multer instance
+const upload = multer({
+  storage: multerStorage,
+  fileFilter: multerFilter,
 });
+
+module.exports = upload;
