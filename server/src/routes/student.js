@@ -38,6 +38,15 @@ router.patch(
     Logger(events.PROFILE_UPDATED)
 );
 
+router.post(
+    "/profile",
+    Auth,
+    Authorize(Role.Student),
+    studentController.editProfile,
+    Logger(events.PROFILE_UPDATED)
+);
+
+
 // Get all semester info
 router.get("/semester", Auth, Authorize(Role.Student), studentController.getSemesterInfo);
 
