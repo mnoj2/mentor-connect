@@ -37,7 +37,7 @@ const Main = () => {
                         <span className="text-blue-500">Welcome</span>, to
                     </h1>
                     <h1 style={{ fontSize: "40px" }} className="w-full text-center">
-                        Student Mentoring System
+                        Mentor Connect
                     </h1>
                 </div>
                 <img src={bg} alt="" className="w-1/2" />
