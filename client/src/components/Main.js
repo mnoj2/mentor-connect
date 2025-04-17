@@ -33,10 +33,10 @@ const Main = () => {
         <div className="w-full h-screen flex items-center">
             <div className="flex-2 bg-white h-full flex flex-col items-center justify-center">
                 <div className="w-full">
-                    <h1 style={{ fontSize: "70px" }} className="w-full text-center">
+                    <h1 style={{ fontSize: "60px" }} className="w-full text-center">
                         <span className="text-blue-500">Welcome</span>, to
                     </h1>
-                    <h1 style={{ fontSize: "40px" }} className="w-full text-center">
+                    <h1 style={{ fontSize: "70px" }} className="w-full text-center">
                         Mentor Connect
                     </h1>
                 </div>
