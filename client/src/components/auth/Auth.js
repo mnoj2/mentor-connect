@@ -199,11 +199,14 @@ const Auth = ({ location }) => {
                                 control={<Checkbox sx={{ color: "white", "&.Mui-checked": { color: "white" } }} />}
                                 label="Show password"
                             />
-                            // {!toggleLogin && (
-                            //     <button type="button" onClick={() => setShowModal(true)} className="text-white hover:underline">
-                            //         Forgot password
-                            //     </button>
-                            // )}
+                            {/*
+                                {!toggleLogin && (
+                                <button type="button" onClick={() => setShowModal(true)} className="text-white hover:underline">
+                                    Forgot password
+                                </button>
+                                )}
+                            */}
+
                         </div>
 
                         <button type="submit" className="bg-white py-2 px-3 rounded-full flex items-center justify-center gap-x-2 w-full text-gray-600 group mt-4">
