@@ -50,7 +50,7 @@ const adminSchema = new mongoose.Schema(
         emailVerifyToken: String,
         isEmailVerified: {
             type: Boolean,
-            default: false
+            default: true
         },
     },
     {
