@@ -21,11 +21,11 @@ export const mentorSignIn = (fields, history) => async (dispatch) => {
 export const mentorSignUp = (fields, handleToggle) => async (dispatch) => {
     const handleActions = () => {
         handleToggle();
-        showToast(
-            "info",
-            "We have sent a verification email to the registered email id, please verify before login",
-            false
-        );
+        // showToast(
+        //     "info",
+        //     "We have sent a verification email to the registered email id, please verify before login",
+        //     false
+        // );
     };
 
     try {
