@@ -171,6 +171,14 @@ const Auth = ({ location }) => {
                                 <select id="department" name="department" className="rounded-lg border-gray-300" value={fields.department} onChange={handleChange} required>
                                     <option value="">Select department</option>
                                     <option value="Computer Science & Engineering">Computer Science & Engineering</option>
+                                    <option value="Bio Technology">Bio Technology</option>
+                                    <option value="Artificial Intelligence and Data Science">Artificial Intelligence and Data Science</option>
+                                    <option value="Civil Engineering">Civil Engineering</option>
+                                    <option value="Electronics and Communication Engineering">Electronics and Communication Engineering</option>
+                                    <option value="Electrical and Electronics Engineering">Electrical and Electronics Engineering</option>
+                                    <option value="Information Technology">Information Technology</option>
+                                    <option value="Mechanical Engineering">Mechanical Engineering</option>
+                                    <option value="Mechatronics Engineering">Mechatronics Engineering</option>
                                 </select>
                             </div>
                         )}
